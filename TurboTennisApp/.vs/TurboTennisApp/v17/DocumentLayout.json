@@ -1,0 +1,207 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\dev\\turbo-tennis\\TurboTennisApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\group.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\group.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\match.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\match.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\playerscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\playerscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\set.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\set.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\tournament.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\tournament.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\backend\\models\\matchtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\backend\\models\\matchtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|d:\\dev\\turbo-tennis\\turbotennisapp\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4343406F-6F4B-417F-88CF-66215CDD59A0}|TurboTennisApp.csproj|solutionrelative:components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MatchType.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\MatchType.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\MatchType.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\MatchType.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\MatchType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T21:00:50.261Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAowB4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T20:35:44.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DbContext.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\DbContext.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\DbContext.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\DbContext.cs",
+              "RelativeToolTip": "Components\\Backend\\DbContext.cs",
+              "ViewState": "AgIAADgAAAAAZGZmZqYqwEgAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T20:26:18.907Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PlayerScore.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\PlayerScore.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\PlayerScore.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\PlayerScore.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\PlayerScore.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T19:33:15.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Set.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Set.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\Set.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Set.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\Set.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T19:34:31.257Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Match.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Match.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\Match.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Match.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\Match.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAQwAkAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T19:19:59.688Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Group.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Group.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\Group.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Group.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\Group.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T19:19:09.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Player.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Player.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\Player.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Player.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\Player.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAQwAgAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T19:16:26.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Tournament.cs",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Tournament.cs",
+              "RelativeDocumentMoniker": "Components\\Backend\\Models\\Tournament.cs",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Backend\\Models\\Tournament.cs",
+              "RelativeToolTip": "Components\\Backend\\Models\\Tournament.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-30T19:13:33.535Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "App.razor",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Components\\App.razor",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\App.razor",
+              "RelativeToolTip": "Components\\App.razor",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAowAsAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-30T18:43:12.257Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "Components\\Layout\\MainLayout.razor",
+              "ToolTip": "D:\\dev\\turbo-tennis\\TurboTennisApp\\Components\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "Components\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAAMAAAAAMzMzMzMLwAYAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-30T18:33:11.293Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+Groups weiß noch nicht welche Matches dazu gehören.
+
+Bei Änderung vom Code muss die alte Migration gelöscht werden und eine neue erstellt.
