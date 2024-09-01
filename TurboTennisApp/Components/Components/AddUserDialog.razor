@@ -1,0 +1,52 @@
+﻿@using TurboTennisApp.Components.Backend
+@using TurboTennisApp.Components.Backend.Models
+@inject TournamentService TournamentSerivce
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="12">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Vorname"
+                                  @bind-Value="model.Firstname" For="@(() => model.Firstname)" />      
+                    <MudTextField Label="Nachname"
+                                  @bind-Value="model.Lastname" For="@(() => model.Lastname)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Erstellen</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+@code {
+
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+    [Parameter] public EventCallback<Player> OnPlayerAdded { get; set; }
+    AddUserForm model = new AddUserForm();
+
+    public class AddUserForm
+    {
+        [Required(ErrorMessage = "Vorname ist notwendig")]
+        [StringLength(8, ErrorMessage = "Name length can't be more than 8.")]
+        public string Firstname { get; set; }      
+
+        [Required(ErrorMessage = "Nachname ist notwendig")]
+        [StringLength(8, ErrorMessage = "Name length can't be more than 8.")]
+        public string Lastname { get; set; }
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        Player player = new Player() { Firstname = model.Firstname, Lastname = model.Lastname};
+       
+        await TournamentSerivce.AddPlayerAsync(player);
+        await OnPlayerAdded.InvokeAsync(player);
+
+        MudDialog.Close(DialogResult.Ok(player));
+    }
+
+}

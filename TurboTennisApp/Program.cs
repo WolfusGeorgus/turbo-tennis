@@ -2,14 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using TurboTennisApp.Components;
 using TurboTennisApp.Components.Backend;
+using TurboTennisApp.Components.Backend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseSqlite("Data Source=D:\\dev\\turbo-tennis\\tournament.db"));
+builder.Services.AddDbContext<TournamentContext>(options =>
+    options.UseSqlite("Data Source=D:\\dev\\turbo-tennis\\tournamentV2.db"));
 
 // Add MudBlazor services
 builder.Services.AddMudServices();
+
+builder.Services.AddScoped<TournamentService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

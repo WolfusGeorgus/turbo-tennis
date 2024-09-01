@@ -1,0 +1,85 @@
+﻿@page "/show-tournaments"
+@using TurboTennisApp.Components.Backend
+@using TurboTennisApp.Components.Backend.Models
+@inject TournamentService TournamentService
+
+<PageTitle>Turniererstellung</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Counter</MudText>
+
+<MudTextField @bind-Value="TournamentName" Label="Turniername" Variant="Variant.Text" @onblur="ValidateTournamentName" Required="true" Error="@isNameInvalid" ErrorText="Turniername ist erforderlich"></MudTextField>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="CreateTournament">Turnier erstellen</MudButton>
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="DeleteTournaments">Turniere löschen</MudButton>
+
+<MudTable Items="@list" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Name</MudTh>
+
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private string TournamentName;
+    private bool isNameInvalid = false;
+    private IEnumerable<Tournament> list;
+    private bool _loading;
+
+    private void ValidateTournamentName()
+    {
+        isNameInvalid = string.IsNullOrWhiteSpace(TournamentName);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
+        try
+        {
+            list = await TournamentService.GetAllTournamentsAsync();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async void CreateTournament()
+    {
+        // Validierung überprüfen
+        if (isNameInvalid)
+        {
+            return; // Beende die Methode, wenn die Validierung fehlschlägt
+        }
+
+        List<Phase> phases = await TournamentService.GetAllPhasesAsync();
+
+        Tournament tournament = new Tournament()
+            {
+                Name = TournamentName,
+                PhaseId = phases.Where(x => x.Name == "Created").First().Id,
+            };
+        await TournamentService.AddTournamentAsync(tournament);
+
+        // Leere das Textfeld nach dem Erstellen des Turniers
+        TournamentName = string.Empty;
+        isNameInvalid = false;
+
+        list = await TournamentService.GetAllTournamentsAsync();
+    }
+
+    private async void DeleteTournaments()
+    {
+        var tournaments = await TournamentService.GetAllTournamentsAsync();
+
+        foreach (var tournament in tournaments)
+        {
+            await TournamentService.DeleteTournamentAsync(tournament.Id);
+        }
+        list = await TournamentService.GetAllTournamentsAsync();
+    }
+}

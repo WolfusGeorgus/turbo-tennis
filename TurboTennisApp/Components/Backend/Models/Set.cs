@@ -1,11 +1,17 @@
-﻿namespace TurboTennisApp.Components.Backend.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace TurboTennisApp.Components.Backend.Models;
+
+public partial class Set
 {
-    public class Set
-    {
-        public int Id { get; set; }
-        public int GameId {  get; set; }
-        public Match Match { get; set; }
-        public int MatchId { get; set; }
-        public List<PlayerScore> PlayerScores { get; set; }
-    }
+    public int Id { get; set; }
+
+    public int? Setnumber { get; set; }
+
+    public int? GameId { get; set; }
+
+    public virtual Game? Game { get; set; }
+
+    public virtual ICollection<PlayerSet> PlayerSets { get; set; } = new List<PlayerSet>();
 }

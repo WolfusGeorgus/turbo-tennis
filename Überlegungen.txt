@@ -1,3 +1,20 @@
-Groups weiß noch nicht welche Matches dazu gehören.
 
 Bei Änderung vom Code muss die alte Migration gelöscht werden und eine neue erstellt.
+
+dotnet ef database update 0 => Löscht Tabellen
+dotnet ef migrations remove => Löscht Migrations
+dotnet ef migrations add InitCreate
+dotnet ef database update 
+
+-------------
+
+DB First
+
+dotnet ef dbcontext scaffold "Data Source=D:\dev\turbo-tennis\tournamentV2.db" Microsoft.EntityFrameworkCore.Sqlite --output-dir Models --context-dir Data --context TournamentContext --force
+
+-----------
+
+Git ignore einrichten 
+
+User kann man nicht hinzufügen richtig.
+Beim ersten mal sagt er form is nicht valid, und ich bekomme auch nicht die error Messages hin

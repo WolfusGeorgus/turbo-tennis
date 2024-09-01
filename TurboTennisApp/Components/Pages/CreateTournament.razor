@@ -1,0 +1,162 @@
+﻿@page "/create-tournament"
+@using FluentValidation
+@using TurboTennisApp.Components.Backend
+@using TurboTennisApp.Components.Backend.Models
+@using TurboTennisApp.Components.Components
+@inject TournamentService TournamentService
+@inject IDialogService DialogService
+
+<PageTitle>Turniererstellung</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Turnier erstellen</MudText>
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudCard>
+        <MudForm Model="@NewTournament" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+            <MudCardContent>
+                <!-- Abstand nach dem Turniernamen -->
+                <MudTextField @bind-Value="NewTournament.Name"
+                              For="@(() => NewTournament.Name)"
+                              Immediate="true"
+                              Label="Turniername"
+                              Class="mb-4"/>
+
+                <!-- Grid für die Auswahl der Spieler -->
+                <MudGrid>
+                    @for (int i = 0; i < PlayerSelections.Count; i++)
+                    {
+                        // Komischerweise muss man das so machen, da nach der letzten Iteration nochmal i++ passiert, und i theoretisch größer als Count ist
+                        // in @bind wird eine Lambda Funktion genutzt, die vermutlich auf den letzten Wert zugreift (welcher zu groß war)
+                        int index = i;
+                        <MudItem xs="12">
+                            <MudGrid>
+                                <MudItem xs="10">
+                                    <MudSelect @bind-Value="PlayerSelections[index]" Label="Spieler" T="Player">
+                                        @foreach (var p in AllPlayers)
+                                        {
+                                            <MudSelectItem Value="p">@($"{p.Firstname} {p.Lastname}")</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </MudItem>
+                                <MudItem xs="2">
+                                    <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="@(() => RemovePlayer(index))">
+                                        <MudIcon Icon="@Icons.Material.Filled.Delete" />
+                                    </MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                    }
+                </MudGrid>
+
+                <div style="margin-top: 16px;"></div>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="AddPlayer">Spieler hinzufügen</MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="OpenDialogAsync">Spieler erstellen</MudButton>
+
+            </MudCardContent>
+        </MudForm>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Turnier erstellen</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+@code {
+    [Inject] ISnackbar Snackbar { get; set; }
+
+    MudForm form;
+    List<Player>? AllPlayers;
+    Tournament NewTournament = new Tournament();
+    TournamentFluentValidator validator = new TournamentFluentValidator();
+
+    // A list to store the selected players
+    List<Player> PlayerSelections = new List<Player>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AllPlayers = await TournamentService.GetAllPlayersAsync();
+
+        // Initialize with 4 empty player selections
+        for (int i = 0; i < 4; i++)
+        {
+            PlayerSelections.Add(null);
+        }
+    }
+
+    private void AddPlayer()
+    {
+        PlayerSelections.Add(null);
+        StateHasChanged(); // Refresh the UI after adding a player
+    }
+
+    private void RemovePlayer(int index)
+    {
+        if (index >= 0 && index < PlayerSelections.Count && PlayerSelections.Count > 1)
+        {
+            PlayerSelections.RemoveAt(index);
+            StateHasChanged(); // Refresh the UI after removing a player
+        }
+    }
+
+    private async Task Submit()
+    {
+        await form.Validate();
+
+        if (form.IsValid)
+        {
+            // Here you might map PlayerSelections to the NewTournament object if needed
+            NewTournament.Players = PlayerSelections
+                .Where(p => p != null)
+                .ToList();
+
+            await TournamentService.AddTournamentAsync(NewTournament);
+            Snackbar.Add("Submitted!");
+        }
+    }
+    private async Task OpenDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var dialogResult = await DialogService.ShowAsync<AddUserDialog>("Spieler erstellen", new DialogParameters
+        {
+            { "OnPlayerAdded", new EventCallback<Player>(this, HandlePlayerAdded) }
+        }, options);
+
+        AllPlayers = await TournamentService.GetAllPlayersAsync();
+        StateHasChanged();
+    }
+
+    private void HandlePlayerAdded(Player newPlayer)
+    {
+        if (newPlayer != null && !AllPlayers.Any(p => p.Firstname == newPlayer.Firstname && p.Lastname == newPlayer.Lastname))
+        {
+            AllPlayers.Add(newPlayer);
+        }
+    }
+
+
+    /// <summary>
+    /// A standard AbstractValidator which contains multiple rules and can be shared with the back end API
+    /// </summary>
+    public class TournamentFluentValidator : AbstractValidator<Tournament>
+    {
+        public TournamentFluentValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .Length(1, 100);
+        }
+
+        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        {
+            var result = await ValidateAsync(ValidationContext<Tournament>.CreateWithOptions((Tournament)model, x => x.IncludeProperties(propertyName)));
+            if (result.IsValid)
+                return Array.Empty<string>();
+            return result.Errors.Select(e => e.ErrorMessage);
+        };
+    }
+
+    public class PlayerSelection
+    {
+        public Player? SelectedPlayer { get; set; }
+    }
+
+}
