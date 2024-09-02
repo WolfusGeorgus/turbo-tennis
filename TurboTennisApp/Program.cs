@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using TurboTennisApp.Components;
 using TurboTennisApp.Components.Backend;
-using TurboTennisApp.Components.Backend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,7 +2,7 @@
 @using TurboTennisApp.Components.Backend.Models
 @inject TournamentService TournamentSerivce
 @using System.ComponentModel.DataAnnotations
-
+@* 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
@@ -16,16 +16,35 @@
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Erstellen</MudButton>
+                    <MudButton OnClick="Cancel" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto">Cancel</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
     </MudGrid>
+</EditForm> *@
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+<MudPaper Class="pa-4">
+    <MudStack Spacing="4">
+                <MudTextField Label="Vorname"
+                              @bind-Value="model.Firstname" For="@(() => model.Firstname)" />
+                <MudTextField Label="Nachname"
+                              @bind-Value="model.Lastname" For="@(() => model.Lastname)" />
+        <MudStack Row="true" Justify="Justify.SpaceEvenly">
+            <MudPaper><MudButton OnClick="Cancel" Variant="Variant.Outlined" Color="Color.Primary" Class="ml-auto">Cancel</MudButton></MudPaper>
+            <MudPaper><MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Erstellen</MudButton></MudPaper>
+         </MudStack>
+    </MudStack>
+</MudPaper>
 </EditForm>
+
+
 @code {
 
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; }
-    [Parameter] public EventCallback<Player> OnPlayerAdded { get; set; }
+    [Parameter] 
+    public EventCallback<Player> OnPlayerAdded { get; set; }
     AddUserForm model = new AddUserForm();
 
     public class AddUserForm
@@ -42,11 +61,16 @@
     private async Task OnValidSubmit(EditContext context)
     {
         Player player = new Player() { Firstname = model.Firstname, Lastname = model.Lastname};
-       
+
         await TournamentSerivce.AddPlayerAsync(player);
         await OnPlayerAdded.InvokeAsync(player);
 
         MudDialog.Close(DialogResult.Ok(player));
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Close(DialogResult.Cancel());
     }
 
 }

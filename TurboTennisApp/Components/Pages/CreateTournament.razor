@@ -17,7 +17,8 @@
                 <MudTextField @bind-Value="NewTournament.Name"
                               For="@(() => NewTournament.Name)"
                               Immediate="true"
-                              Label="Turniername"
+                              Label="Turniername" Variant="Variant.Outlined"
+                              Typo="Typo.h5"
                               Class="mb-4"/>
 
                 <!-- Grid für die Auswahl der Spieler -->
@@ -30,7 +31,7 @@
                         <MudItem xs="12">
                             <MudGrid>
                                 <MudItem xs="10">
-                                    <MudSelect @bind-Value="PlayerSelections[index]" Label="Spieler" T="Player">
+                                    <MudSelect @bind-Value="PlayerSelections[index]" Label="@($"Spieler {index + 1}")" T="Player">
                                         @foreach (var p in AllPlayers)
                                         {
                                             <MudSelectItem Value="p">@($"{p.Firstname} {p.Lastname}")</MudSelectItem>
@@ -106,6 +107,8 @@
             NewTournament.Players = PlayerSelections
                 .Where(p => p != null)
                 .ToList();
+
+            //NewTournament.Init();
 
             await TournamentService.AddTournamentAsync(NewTournament);
             Snackbar.Add("Submitted!");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TurboTennisApp.Components.Backend.Models;
 
-namespace TurboTennisApp.Components.Backend.Data;
+namespace TurboTennisApp.Components.Backend;
 
 public partial class TournamentContext : DbContext
 {
@@ -18,11 +18,15 @@ public partial class TournamentContext : DbContext
 
     public virtual DbSet<Game> Games { get; set; }
 
+    public virtual DbSet<GameStatus> GameStatuses { get; set; }
+
     public virtual DbSet<Group> Groups { get; set; }
 
     public virtual DbSet<Phase> Phases { get; set; }
 
     public virtual DbSet<Player> Players { get; set; }
+
+    public virtual DbSet<PlayerGame> PlayerGames { get; set; }
 
     public virtual DbSet<PlayerSet> PlayerSets { get; set; }
 
@@ -31,7 +35,6 @@ public partial class TournamentContext : DbContext
     public virtual DbSet<Tournament> Tournaments { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlite("Data Source=D:\\dev\\turbo-tennis\\tournamentV2.db");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,13 +45,23 @@ public partial class TournamentContext : DbContext
 
             entity.Property(e => e.GroupId).HasColumnName("Group_id");
             entity.Property(e => e.PhaseId).HasColumnName("Phase_id");
+            entity.Property(e => e.StatusId).HasColumnName("Status_id");
             entity.Property(e => e.TournamentId).HasColumnName("Tournament_id");
 
             entity.HasOne(d => d.Group).WithMany(p => p.Games).HasForeignKey(d => d.GroupId);
 
             entity.HasOne(d => d.Phase).WithMany(p => p.Games).HasForeignKey(d => d.PhaseId);
 
+            entity.HasOne(d => d.Status).WithMany(p => p.Games).HasForeignKey(d => d.StatusId);
+
             entity.HasOne(d => d.Tournament).WithMany(p => p.Games).HasForeignKey(d => d.TournamentId);
+        });
+
+        modelBuilder.Entity<GameStatus>(entity =>
+        {
+            entity.ToTable("GameStatus");
+
+            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         modelBuilder.Entity<Group>(entity =>
@@ -102,6 +115,22 @@ public partial class TournamentContext : DbContext
                         j.IndexerProperty<int>("PlayerId").HasColumnName("Player_id");
                         j.IndexerProperty<int>("TournamentId").HasColumnName("Tournament_id");
                     });
+        });
+
+        modelBuilder.Entity<PlayerGame>(entity =>
+        {
+            entity.ToTable("PlayerGame");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.GameId).HasColumnName("game_id");
+            entity.Property(e => e.PlayerId).HasColumnName("player_id");
+            entity.Property(e => e.StatusId).HasColumnName("status_id");
+
+            entity.HasOne(d => d.Game).WithMany(p => p.PlayerGames).HasForeignKey(d => d.GameId);
+
+            entity.HasOne(d => d.Player).WithMany(p => p.PlayerGames).HasForeignKey(d => d.PlayerId);
+
+            entity.HasOne(d => d.Status).WithMany(p => p.PlayerGames).HasForeignKey(d => d.StatusId);
         });
 
         modelBuilder.Entity<PlayerSet>(entity =>
