@@ -7,6 +7,3 @@ where g.Tournament_id = t.id
   and p.Firstname = "Bob"
   and p.Lastname = "Brown";
   
- select * from Tournament;
-  
- commit;

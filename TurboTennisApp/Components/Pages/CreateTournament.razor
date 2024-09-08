@@ -76,9 +76,9 @@
         AllPlayers = await TournamentService.GetAllPlayersAsync();
 
         // Initialize with 4 empty player selections
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 16; i++)
         {
-            PlayerSelections.Add(null);
+            PlayerSelections.Add(AllPlayers[i]);
         }
     }
 
@@ -108,10 +108,9 @@
                 .Where(p => p != null)
                 .ToList();
 
-            //NewTournament.Init();
-
-            await TournamentService.AddTournamentAsync(NewTournament);
-            Snackbar.Add("Submitted!");
+            //await TournamentService.AddTournamentAsync(NewTournament);
+            await TournamentService.InitTournamentAsync(NewTournament, (List<Player>) NewTournament.Players, 4);
+            Snackbar.Add("Turnier erstellt!", MudBlazor.Severity.Success);
         }
     }
     private async Task OpenDialogAsync()

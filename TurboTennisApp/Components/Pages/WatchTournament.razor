@@ -1,0 +1,90 @@
+﻿@page "/tournament/{TournamentId:int?}"
+@using TurboTennisApp.Components.Backend
+@using TurboTennisApp.Components.Backend.Models
+@inject TournamentService TournamentService
+
+<PageTitle>@TournamentName</PageTitle>
+<MudText Typo="Typo.h3" GutterBottom="true">Turnier: @TournamentName</MudText>
+
+<MudTabs Rounded="true" Centered="true" PanelClass="pa-6"  Color="@Color.Primary">
+    <MudTabPanel Text="Gruppenphase">
+        @if(tournament is not null && tournament.Groups.Any()){
+            foreach(var group in tournament.Groups)
+            {
+                <MudCard Class="mb-4">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">Gruppe: @group.Name</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary">Spiele</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            }
+        }
+    </MudTabPanel>
+    <MudTabPanel Text="Achtelfinale">
+        <MudText>Inhalte des Achtelfinales</MudText>
+        <!-- Hier kannst du den Inhalt für das Achtelfinale einfügen -->
+    </MudTabPanel>
+    <MudTabPanel Text="Halbfinale">
+        <MudText>Inhalte des Halbfinales</MudText>
+        <!-- Hier kannst du den Inhalt für das Halbfinale einfügen -->
+    </MudTabPanel>
+    <MudTabPanel Text="Finale">
+        <MudText>Inhalte des Finales</MudText>
+        <!-- Hier kannst du den Inhalt für das Finale einfügen -->
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+    [Parameter]
+    public int? TournamentId { get; set; }
+
+    private string TournamentName;
+    private bool isNameInvalid = false;
+    private bool _loading;
+    private Tournament? tournament;
+    private Dictionary<Group, List<PlayerResults>> GroupTables;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
+        try
+        {
+            if (TournamentId.HasValue)
+            {
+                // Lade das spezifische Turnier, wenn eine ID übergeben wurde
+                tournament = await TournamentService.GetCompleteTournamentByIdAsync(TournamentId.Value);
+                TournamentName = tournament?.Name ?? string.Empty;
+                GroupTables = await CalculateGroup(tournament.Id);
+            }
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task<Dictionary<Group, List<PlayerResults>>> CalculateGroup(int tournamentId)
+    {
+        Dictionary<Group, List<PlayerResults>> groupTable = new();
+        var groups = await TournamentService.GetAllGroupsByTournamentId(tournamentId);
+        foreach(Group group in groups)
+        {
+
+        }
+        return groupTable;
+    }
+
+    class GroupTable
+    {
+        Dictionary<Group, List<PlayerResults>>  Groups {get; set;}
+    }
+
+    class PlayerResults
+    {
+        Player Player { get; set; }
+        int Wins { get; set;  }
+        int Losses { get; set; }
+    }
+}

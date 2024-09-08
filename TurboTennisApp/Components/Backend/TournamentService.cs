@@ -1,13 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
 using TurboTennisApp.Components.Backend.Models;
 
 namespace TurboTennisApp.Components.Backend
 {
     public class TournamentService
     {
+        private const int PlayersInQuarterFinale = 8;
+        private const int PlayersInHalfFinale = 4;
+        private const int PlayersInFinale = 2;
+        private const int AmountSets = 3;
         private readonly TournamentContext _context;
-        private int amountSets = 3;
 
         public TournamentService(TournamentContext context)
         {
@@ -30,12 +34,21 @@ namespace TurboTennisApp.Components.Backend
         {
             _context.Tournaments.Add(tournament);
             await _context.SaveChangesAsync();
-        }
+        }      
 
         // Beispiel: Hole ein Turnier nach ID
         public async Task<Tournament?> GetTournamentByIdAsync(int id)
         {
             return await _context.Tournaments.FindAsync(id);
+        }   
+        
+        public async Task<Tournament?> GetCompleteTournamentByIdAsync(int id)
+        {
+
+            return await _context.Tournaments
+                .Include(t => t.Groups)
+                .ThenInclude(g => g.Players)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         // Beispiel: Hole alle Turniere
@@ -64,8 +77,9 @@ namespace TurboTennisApp.Components.Backend
 
         public async Task InitTournamentAsync(Tournament tournament, List<Player> players, int minPlayersInGroup)
         {
+            //await AddTournamentAsync(tournament);
+
             int amountGroups = players.Count / minPlayersInGroup;
-            int amountInCross = 8;
             var shuffledPlayers = players.OrderBy(p => Guid.NewGuid()).ToList();
             var groups = new List<Group>();
             for (int i = 0; i < amountGroups; i++) 
@@ -88,123 +102,144 @@ namespace TurboTennisApp.Components.Backend
                 groups[groupIndex].Players.Add(player);
                 groupIndex = (groupIndex + 1) % amountGroups;
             }
+            
 
-            GameStatus gameStatus = (await GetAllGameStatusAsync()).Where(s => s.Name == "Created").First();
-            Phase phase = (await GetAllPhasesAsync()).Where(s => s.Name == "Group").First();
+            var Phases = await GetAllPhasesAsync();
+            var phaseGroup = Phases.First(p => p.Name == "Group");
+            var phaseQuarter = Phases.First(p => p.Name == "Quarter");
+            var phaseHalf = Phases.First(p => p.Name == "Half");
+            var phasePlacement = Phases.First(p => p.Name == "Placement");
+            GameStatus createdStatus = (await GetAllGameStatusAsync()).Where(s => s.Name == "Created").First();
 
+            List<Game> games = new();
             foreach (var group in groups)
             {
-                int groupOrder = 1;
-                for (int i = 0; i < group.Players.Count;i++)
-                {
-                    for (int j = i + 1; j < group.Players.Count; j++)
-                    {
-                        Game game = new();
-                        game.Status = gameStatus;
-                        game.StatusId = gameStatus.Id;
-                        game.Phase = phase;
-                        game.PhaseId = phase.Id;
-                        game.Order = groupOrder++;
-                        Player player1 = group.Players.ElementAt(i);
-                        Player player2 = group.Players.ElementAt(j);
-
-                        PlayerGame pg1 = new();
-                        PlayerGame pg2 = new();
-                        pg1.Player = player1;
-                        pg1.PlayerId = player1.Id;   
-                        pg2.Player = player2;
-                        pg2.PlayerId = player2.Id;
-                        pg1.Status = game.Status;
-                        pg1.StatusId = game.StatusId;
-                        pg2.Status = game.Status;
-                        pg2.StatusId = game.StatusId;
-
-                        await AddPlayerGameAsync(pg1);
-                        await AddPlayerGameAsync(pg2);
-
-                        game.PlayerGames.Add(pg1);
-                        game.PlayerGames.Add(pg2);
-
-                        for (int k = 1;  k <= amountSets; k++)
-                        {
-                            Set set = new Set();
-                            set.Game = game;
-                            set.GameId = game.Id;
-
-                            PlayerSet playerSet1 = new PlayerSet();
-                            PlayerSet playerSet2 = new PlayerSet();
-
-                            playerSet1.Player = player1;
-                            playerSet2.Player = player2;
-                            playerSet1.PlayerId = player1.Id;
-                            playerSet2.PlayerId = player2.Id;
-
-                            set.PlayerSets.Add(playerSet1);
-                            set.PlayerSets.Add(playerSet2);
-
-                            game.Sets.Add(set);
-                        }
-                    }
-                }
+                games.AddRange(CreateGroupGames(group, createdStatus, phaseGroup));
             }
 
-            phase = (await GetAllPhasesAsync()).Where(s => s.Name == "Cross").First();
-            int crossOrder = 1;
-            for (int i = 0; i < amountInCross; i++)
+            games.AddRange(CreateKnockoutGames(phaseQuarter, createdStatus, PlayersInQuarterFinale));
+            games.AddRange(CreateKnockoutGames(phaseHalf, createdStatus, PlayersInHalfFinale));
+            games.AddRange(CreateFinalGames(phasePlacement, createdStatus, PlayersInFinale));
+
+            foreach (var game in games)
             {
-                Game game = new Game();
-                game.Phase = phase;
-                game.PhaseId = phase.Id;
-                game.Order = crossOrder++;
-
-                for (int k = 1; k <= amountSets; k++)
-                {
-                    Set set = new Set();
-                    set.Game = game;
-                    set.GameId = game.Id;
-
-                    game.Sets.Add(set);
-                }
+                tournament.Games.Add(game);
             }
+            await UpdateTournamentAsync(tournament);
+        }
 
-            phase = (await GetAllPhasesAsync()).Where(s => s.Name == "Half").First();
-            int halfOrder = 1;
-            for (int i = 0; i < 4; i++)
+        private Game CreateGame(GameStatus gameStatus, Phase phase, int order, Player? player1 = null, Player? player2 = null)
+        {
+            Game game = new Game()
             {
-                Game game = new Game();
-                game.Phase = phase;
-                game.PhaseId = phase.Id;
-                game.Order = halfOrder++;
+                Status = gameStatus,
+                StatusId = gameStatus.Id,
+                Phase = phase,
+                PhaseId = phase.Id,
+                Order = order,
+            };
 
-                for (int k = 1; k <= amountSets; k++)
-                {
-                    Set set = new Set();
-                    set.Game = game;
-                    set.GameId = game.Id;
-
-                    game.Sets.Add(set);
-                }
+            if (player1 is not null && player2 is not null)
+            {
+                game.PlayerGames.Add(CreatePlayerGame(gameStatus, player1));
+                game.PlayerGames.Add(CreatePlayerGame(gameStatus, player2));
             }
 
-            phase = (await GetAllPhasesAsync()).Where(s => s.Name == "Placement").First();
+            return game;
+        }
+
+        private void CreateSetsForGame(Game game, Player? player1 = null, Player? player2 = null)
+        {
+            for (int setNumber = 1; setNumber <= AmountSets; setNumber++)
+            {
+                Set set = new Set
+                {
+                    Game = game,
+                    GameId = game.Id
+                };
+
+                if (player1 is not null && player2 is not null)
+                {
+                    set.PlayerSets.Add(CreatePlayerSet(player1));
+                    set.PlayerSets.Add(CreatePlayerSet(player2));
+                }
+
+                game.Sets.Add(set);
+            }
+        }
+
+        private List<Game> CreateKnockoutGames(Phase phase, GameStatus gameStatus, int playersCount)
+        {
+            List<Game> Games = new();
+            int gameOrder = 1;
+            for (int i = 0; i < playersCount; i++)
+            {
+                Game game = CreateGame(gameStatus, phase, gameOrder++);
+                Games.Add(game);
+                for (int k = 1; k <= AmountSets; k++)
+                {
+                    CreateSetsForGame(game);
+                }
+            }
+            return Games;
+        }
+
+        private List<Game> CreateFinalGames(Phase phase, GameStatus gameStatus, int playersCount)
+        {
+            List<Game> Games = new();
             int placementOrder = 1;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < playersCount; i++)
             {
-                Game game = new Game();
-                game.Phase = phase;
-                game.PhaseId = phase.Id;
-                game.Order = placementOrder;
+                Game game = CreateGame(gameStatus, phase, placementOrder);
+                Games.Add(game);
                 placementOrder += 2;
 
-                for (int k = 1; k <= amountSets; k++)
+                for (int k = 1; k <= AmountSets; k++)
                 {
-                    Set set = new Set();
-                    set.Game = game;
-                    set.GameId = game.Id;
-
-                    game.Sets.Add(set);
+                    CreateSetsForGame(game);
                 }
             }
+            return Games;
+        }
+
+        private List<Game> CreateGroupGames(Group group, GameStatus gameStatus, Phase phase)
+        {
+            List<Game> Games = new();
+            var playersList = group.Players.ToList();
+            int gameOrder = 1;
+            for (int i = 0; i < playersList.Count; i++)
+            {
+                for (int j = i + 1; j < playersList.Count; j++)
+                {
+                    var player1 = playersList[i];
+                    var player2 = playersList[j];
+                    Game game = CreateGame(gameStatus, phase, gameOrder++, player1, player2);
+                    Games.Add(game);
+                    // Erstelle Sets für das Spiel
+                    CreateSetsForGame(game, player1, player2);
+                }
+            }
+            return Games;
+        }
+
+        private PlayerSet CreatePlayerSet(Player player)
+        {
+            return new PlayerSet()
+            {
+                Player = player,
+                PlayerId = player.Id
+            };
+        }
+
+        private PlayerGame CreatePlayerGame(GameStatus gameStatus, Player player)
+        {
+            return new PlayerGame()
+            {
+                Player = player,
+                PlayerId = player.Id,
+                Status = gameStatus,
+                StatusId = gameStatus.Id
+            };
         }
 
         public async Task<List<Player>> GetAllPlayersAsync()
@@ -218,11 +253,31 @@ namespace TurboTennisApp.Components.Backend
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddPlayerGameAsync(PlayerGame game)
+        public async Task AddGameAsync(Game game)
         {
-            _context.PlayerGames.Update(game);
+            _context.Games.Add(game);
+            await _context.SaveChangesAsync();
+        }     
+        
+        public async Task AddGameAsync(IEnumerable<Game> games)
+        {
+            _context.Games.AddRange(games);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Group>> GetAllGroupsByTournamentId(int id)
+        {
+            return await _context.Groups
+                .Where(g => g.TournamentId == id)
+                .ToListAsync();
+        }
+        
+        public async Task AddGroupAsync(IEnumerable<Group> groups)
+        {
+            _context.Groups.AddRange(groups);
+            await _context.SaveChangesAsync();
+        }
+
 
         public async Task<List<GameStatus>> GetAllGameStatusAsync()
         {
